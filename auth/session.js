@@ -3,12 +3,15 @@ const session = require('express-session');
 
 const app = express();
 
+// Middleware to parse JSON request bodies
+app.use(express.json()); // Add this to fix the undefined req.body issue
+
 // Middleware to set up session management
 app.use(session({
-  secret: 'secret-key',      // Replace with a strong secret key
-  resave: false,             // Whether to save the session data if there were no modifications
-  saveUninitialized: true,   // Whether to save new but not modified sessions
-  cookie: { secure: false }  // Set to true in production with HTTPS
+  secret: 'secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
 }));
 
 // POST endpoint for handling login
