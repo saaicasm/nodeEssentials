@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-const secretKey = 'your-secret-key'; // Replace with a strong secret key
+const secretKey = 'my-cat'; // Replace with a strong secret key
 
 // POST endpoint for user login and JWT generation
 app.post('/login', (req, res) => {
@@ -15,6 +15,8 @@ app.post('/login', (req, res) => {
   if (username === 'user' && password === 'password') {
     // Generate JWT with username payload
     const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+    console.log(token);
+    
     res.json({ token }); // Send token as JSON response
   } else {
     res.send('Invalid credentials');
@@ -25,7 +27,8 @@ app.post('/login', (req, res) => {
 app.get('/dashboard', (req, res) => {
   // Get token from Authorization header
   const token = req.headers['authorization'];
-
+  console.log(token);
+  
   if (token) {
     // Verify JWT token
     jwt.verify(token, secretKey, (err, decoded) => {
@@ -34,6 +37,8 @@ app.get('/dashboard', (req, res) => {
       } else {
         // Token is valid, send welcome message with username
         res.send(`Welcome ${decoded.username}`);
+        console.log(decoded);
+        
       }
     });
   } else {
