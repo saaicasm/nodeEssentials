@@ -20,7 +20,7 @@ let users = [
         lastName: "white",
         email:"joyalwhite@gamil.com",
         DOB:"21-03-1989",
-    },
+    }
 ];
 
 // GET request: Retrieve all users
@@ -44,13 +44,18 @@ router.get("/:email",(req,res)=>{
 
 // POST request: Create a new user
 router.post("/",(req,res)=>{
+    
+    //  console.log(req.body.firstName);
+     
     // Push a new user object into the users array based on query parameters from the request
     users.push({
-        "firstName": req.query.firstName,
-        "lastName": req.query.lastName,
-        "email": req.query.email,
-        "DOB": req.query.DOB
+        "firstName": req.body.firstName,
+        "lastName": req.body.lastName,
+        "email": req.body.email,
+        "DOB": req.body.DOB
     });
+    console.log(users);
+    
     // Send a success message as the response, indicating the user has been added
     res.send("The user " + req.query.firstName + " has been added!");
 });
@@ -58,45 +63,32 @@ router.post("/",(req,res)=>{
 
 // PUT request: Update the details of a user by email ID
 router.put("/:email", (req, res) => {
-    // Extract email parameter and find users with matching email
     const email = req.params.email;
-    let filtered_users = users.filter((user) => user.email === email);
+    console.log(email);
+    // console.log(users);
     
-    if (filtered_users.length > 0) {
-        // Select the first matching user and update attributes if provided
-        let filtered_user = filtered_users[0];
-        
-         // Extract and update DOB if provided
-        
-        let DOB = req.query.DOB;    
-        if (DOB) {
-            filtered_user.DOB = DOB;
-        }
-        
-        /*
-        Include similar code here for updating other attributes as needed
-        */
+    const filteredUser = users.filter((user) => user.email == email);
+    // const filteredUser = users.filter((user) ={user.email == email} );
+    console.log(filteredUser.length);
+    
+    if(filteredUser.length > 0) {
+        filter_user = filteredUser[0];
 
-        let firstName = req.query.firstName;
-        if(firstName) {
-            filtered_user.firstName = firstName;
-        }
-        
-        let lastname = req.query.lastName;
-        if(lastname){
-            filtered_user.lastName = lastname;
-        }
+        filter_user.DOB = req.body.DOB;
 
-        // Replace old user entry with updated user
-        users = users.filter((user) => user.email != email);
-        users.push(filtered_user);
+        users = users.filter((user) => user.email !=email);
+        users.push(filter_user);
+        console.log(filter_user);
         
-        // Send success message indicating the user has been updated
-        res.send(`User with the email ${email} updated.`);
-    } else {
-        // Send error message if no user found
-        res.send("Unable to find user!");
+
+        res.send(`User with email ${email} is added `);
+    }else{ 
+        res.send('user not found')
     }
+
+
+
+
 });
 
 
